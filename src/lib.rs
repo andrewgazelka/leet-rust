@@ -10,7 +10,8 @@ mod problem8;
 mod problem9;
 mod problem10;
 mod problem23;
-mod problem25;
+mod problem773;
+mod problem5;
 
 pub struct Solution {}
 
