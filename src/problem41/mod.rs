@@ -36,6 +36,7 @@ mod tests {
 
     #[test]
     fn it_works() {
+
         assert_eq!(Solution::first_missing_positive(vec![0, 2, 2, 1, 1]), 3);
     }
 }
