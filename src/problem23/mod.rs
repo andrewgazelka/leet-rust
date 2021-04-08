@@ -34,7 +34,7 @@ impl Solution {
         let mut init_data = Vec::with_capacity(lists.len());
 
         lists.into_iter()
-            .filter_map(|list| list)
+            .flatten()
             .for_each(|list| init_data.push(HeapNode(list.val, list)));
 
         let mut heap = BinaryHeap::from(init_data);
