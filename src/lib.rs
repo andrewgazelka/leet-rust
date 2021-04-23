@@ -15,6 +15,8 @@ mod problem0128;
 mod problem0190;
 mod problem0191;
 mod problem0329;
+mod problem0338;
+mod problem0717;
 mod problem0773;
 mod utils;
 
