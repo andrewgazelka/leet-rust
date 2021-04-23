@@ -28,7 +28,7 @@ impl Idx2D {
             6 => (1, 2),
             _ => panic!("invalid number")
         };
-        return Idx2D { row, column };
+        Idx2D { row, column }
     }
 
     fn manhatten(&self, other: Idx2D) -> usize {
