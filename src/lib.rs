@@ -11,6 +11,7 @@ mod problem0023;
 mod problem0041;
 mod problem0042;
 mod problem0060;
+mod problem0089;
 mod problem0128;
 mod problem0190;
 mod problem0191;
