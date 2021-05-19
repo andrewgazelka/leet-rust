@@ -1,5 +1,6 @@
 use crate::Solution;
 
+#[allow(unused_variables)]
 
 impl Solution {
     pub fn is_match(string: String, pattern: String) -> bool {

@@ -3,19 +3,22 @@ use std::collections::BinaryHeap;
 
 use crate::Solution;
 
+
 #[derive(Copy, Clone)]
 struct Idx2D {
     row: usize,
     column: usize,
 }
 
+#[allow(dead_code)]
 pub struct Foo<const N: usize> {
     bytes: [u8; N],
 }
 
-fn foo<const N: usize>(take: Box<Foo<N>>) {
-    struct Foo([i32; 1]);
-}
+// #[allow(dead_code)]
+// fn foo<const N: usize>(take: Box<Foo<N>>) {
+//     struct Foo([i32; 1]);
+// }
 
 impl Idx2D {
     fn desired(number: i32) -> Idx2D {
@@ -55,9 +58,11 @@ fn heuristic(board: &Vec<Vec<i32>>) -> usize {
             summed_manhatten_dist += manhatten_dist;
         }
     }
-    return summed_manhatten_dist;
+    summed_manhatten_dist
 }
 
+
+#[allow(dead_code)]
 struct Node {
     state: Vec<Vec<i32>>,
     g_score: usize,

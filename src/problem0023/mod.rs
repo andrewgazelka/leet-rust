@@ -1,4 +1,4 @@
-use std::cmp::{Ordering, Reverse};
+use std::cmp::{Ordering};
 use std::collections::BinaryHeap;
 
 use crate::{ListNode, Solution};

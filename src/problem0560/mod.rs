@@ -13,22 +13,20 @@ impl Solution {
         map.insert(0, 1);
 
         let mut total = 0;
-        let mut left_sum = 0;
+        let mut pre_sum = 0;
 
         for num in nums {
 
             // the sum from the left side to the index the num is at
-            left_sum += num;
+            pre_sum += num;
 
             // moving index to right result (normalized with k)
-            let right_add = left_sum - k;
+            let right_add = pre_sum - k;
 
-            if let Some(count) = map.get(&right_add) {
-                total += count;
-            }
+            total += map.get(&right_add).unwrap_or(&0);
 
             // moving index to left result
-            map.entry(left_sum).and_modify(|x| *x += 1).or_insert(1);
+            *map.entry(pre_sum).or_insert(0) += 1;
         }
         total
     }
@@ -41,6 +39,7 @@ mod tests {
 
     #[test]
     fn it_works() {
+        assert_eq!(2, Solution::subarray_sum(vec![1, 1, 1],  2));
         assert_eq!(2, Solution::subarray_sum(vec![1, 2, 3],  3));
     }
 }
