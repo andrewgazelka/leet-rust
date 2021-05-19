@@ -1,27 +1,10 @@
-mod problem0001;
-mod problem0002;
-mod problem0003;
-mod problem0005;
-mod problem0006;
-mod problem0007;
-mod problem0008;
-mod problem0009;
-mod problem0010;
-mod problem0023;
-mod problem0041;
-mod problem0042;
-mod problem0060;
-mod problem0089;
-mod problem0128;
-mod problem0190;
-mod problem0191;
-mod problem0329;
-mod problem0338;
-mod problem0659;
-mod problem0717;
-mod problem0773;
 mod utils;
-mod problem0560;
+mod problems0100;
+mod problems0200;
+mod problems0300;
+mod problems0500;
+mod problems0600;
+mod problems0700;
 
 pub struct Solution {}
 

@@ -45,8 +45,7 @@ impl Solution {
 
 #[cfg(test)]
 mod tests {
-    use crate::problem0002::ListNode;
-    use crate::Solution;
+    use crate::{Solution, ListNode};
 
     #[test]
     fn it_works() {
