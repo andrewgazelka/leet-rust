@@ -20,15 +20,15 @@ impl Solution {
             // the sum from the left side to the index the num is at
             left_sum += num;
 
-            // removal
-            let dist_to_k = k - left_sum;
+            // moving index to right result (normalized with k)
+            let right_add = left_sum - k;
 
-            if let Some(count) = map.get(&dist_to_k) {
+            if let Some(count) = map.get(&right_add) {
                 total += count;
             }
 
-            // removal to index result
-            map.entry(-left_sum).and_modify(|x| *x += 1).or_insert(1);
+            // moving index to left result
+            map.entry(left_sum).and_modify(|x| *x += 1).or_insert(1);
         }
         total
     }
