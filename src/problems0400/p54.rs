@@ -4,34 +4,27 @@ use std::collections::HashMap;
 
 use crate::Solution;
 
-fn multiply(map: &HashMap<i32, i32>, vec: &[i32], new_map: &mut HashMap<i32, i32>) {
-    for v_elem in vec {
-        for (m_key, m_val) in map {
-            let sum_key = v_elem + m_key;
-            *new_map.entry(sum_key).or_insert(0) += m_val;
-        }
-    }
-}
 
 impl Solution {
     /// precondition: nums1, nums2, nums3, nums4 length same
     pub fn four_sum_count(nums1: Vec<i32>, nums2: Vec<i32>, nums3: Vec<i32>, nums4: Vec<i32>) -> i32 {
-        let mut base_map = HashMap::new();
-        base_map.insert(0, 1);
+        // inspiration from https://leetcode.com/problems/4sum-ii/discuss/442608/C%2B%2B-or-Fast-and-efficient
 
-        let mut map1 = HashMap::new();
-        let mut map2 = HashMap::new();
-        let mut map3 = HashMap::new();
+        let mut ab = HashMap::new();
 
-        multiply(&base_map, &nums1, &mut map1);
-        multiply(&map1, &nums2, &mut map2);
-        multiply(&map2, &nums3, &mut map3);
+        for a in nums1 {
+            for b in &nums2 {
+                *ab.entry(a+b).or_insert(0) += 1;
+            }
+        }
 
         let mut count = 0;
 
-        for elem in nums4 {
-            let need = -elem;
-            count += map3.get(&need).unwrap_or(&0)
+        for b in nums3 {
+            for c in &nums4 {
+                let need = -(b+c);
+                count += ab.get(&need).unwrap_or(&0)
+            }
         }
 
         count
