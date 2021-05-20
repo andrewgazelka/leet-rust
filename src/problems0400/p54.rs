@@ -4,31 +4,37 @@ use std::collections::HashMap;
 
 use crate::Solution;
 
-fn multiply(map: &HashMap<i32, i32>, vec: &[i32]) -> HashMap<i32, i32> {
-    let mut new_map = HashMap::new();
+fn multiply(map: &HashMap<i32, i32>, vec: &[i32], new_map: &mut HashMap<i32, i32>) {
     for v_elem in vec {
         for (m_key, m_val) in map {
             let sum_key = v_elem + m_key;
             *new_map.entry(sum_key).or_insert(0) += m_val;
         }
     }
-    new_map
 }
 
 impl Solution {
     /// precondition: nums1, nums2, nums3, nums4 length same
     pub fn four_sum_count(nums1: Vec<i32>, nums2: Vec<i32>, nums3: Vec<i32>, nums4: Vec<i32>) -> i32 {
-        let mut map = HashMap::new();
-        map.insert(0, 1);
+        let mut base_map = HashMap::new();
+        base_map.insert(0, 1);
 
-        map = multiply(&map, &nums1);
-        map = multiply(&map, &nums2);
-        map = multiply(&map, &nums3);
+        let mut map1 = HashMap::new();
+        let mut map2 = HashMap::new();
+        let mut map3 = HashMap::new();
 
-        // can optimize here
-        map = multiply(&map, &nums4);
+        multiply(&base_map, &nums1, &mut map1);
+        multiply(&map1, &nums2, &mut map2);
+        multiply(&map2, &nums3, &mut map3);
 
-        *map.get(&0).unwrap_or(&0)
+        let mut count = 0;
+
+        for elem in nums4 {
+            let need = -elem;
+            count += map3.get(&need).unwrap_or(&0)
+        }
+
+        count
     }
 }
 
@@ -44,6 +50,6 @@ mod tests {
         assert_eq!(solve(vec![1, 2], vec![-2, -1], vec![-1, 2], vec![0, 2]), 2);
         assert_eq!(solve(vec![0], vec![0], vec![0], vec![0]), 1);
 
-        assert_eq!(solve(vec![1],vec![-1],vec![0],vec![1]), 0);
+        assert_eq!(solve(vec![1], vec![-1], vec![0], vec![1]), 0);
     }
 }
