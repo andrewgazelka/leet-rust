@@ -2,13 +2,6 @@ use std::ops::{Index, IndexMut};
 
 use crate::Solution;
 
-fn matches(regex_char: char, real_char: char) -> bool {
-    match regex_char {
-        '.' => true,
-        c => c == real_char
-    }
-}
-
 struct Arr2D<T> {
     backing: Vec<T>,
     width: usize,
@@ -43,13 +36,99 @@ impl<T> IndexMut<(usize, usize)> for Arr2D<T> {
     }
 }
 
-#[allow(unused_variables)]
+enum Matcher {
+    Exact(char),
+    Any,
+}
+
+impl Matcher {
+    fn is_valid(&self, other: char) -> bool {
+        match self {
+            Matcher::Exact(val) => *val == other,
+            Matcher::Any => true
+        }
+    }
+}
+
+#[derive(Copy, Clone)]
+enum PatternKind {
+    One,
+    Wildcard
+}
+
+struct PatternElem {
+    matcher: Matcher,
+    kind: PatternKind,
+}
+
+type Pattern = Vec<PatternElem>;
+
+enum CompileError {
+    UnpairedWildcard
+}
+
+fn character_matcher(character: char) -> Matcher {
+    match character {
+        '.' => Matcher::Any,
+        _ => Matcher::Exact(character)
+    }
+}
+
+fn compile_pattern(pattern_str: &str) -> Result<Pattern, CompileError> {
+    let pattern_str: Vec<_> = pattern_str.chars().collect();
+
+
+    let mut vec = Vec::new();
+
+    if pattern_str.is_empty() {
+        return Ok(vec)
+    }
+
+    let mut p_idx = pattern_str.len() - 1;
+
+    loop {
+        let mut character_on = pattern_str[p_idx];
+        let wildcard = character_on == '*';
+
+        if wildcard {
+            if p_idx == 0 {
+                return Err(CompileError::UnpairedWildcard);
+            }
+
+            p_idx -= 1;
+            character_on = pattern_str[p_idx];
+        }
+
+        let matcher = character_matcher(character_on);
+
+        let kind = if wildcard {
+            PatternKind::Wildcard
+        } else {
+            PatternKind::One
+        };
+
+        vec.push(PatternElem {
+            matcher,
+            kind
+        });
+
+        if p_idx > 0 {
+            p_idx -= 1;
+        } else {
+            break
+        }
+    }
+    vec.reverse();
+    Ok(vec)
+}
+
 impl Solution {
     /// support *, .
     /// match *entire* string
     pub fn is_match(string: String, pattern: String) -> bool {
+
         let string: Vec<_> = string.chars().collect();
-        let pattern: Vec<_> = pattern.chars().collect();
+        let pattern = compile_pattern(&pattern).ok().unwrap();
 
         let str_len = string.len();
         let pattern_len = pattern.len();
@@ -58,25 +137,32 @@ impl Solution {
         let mut dp = Arr2D::new(str_len + 1, pattern_len + 1, false);
 
         dp[(str_len, pattern_len)] = true;
-        dp[(str_len - 1, pattern_len)] = true;
 
-        for (s_idx, sc) in string.into_iter().enumerate().rev() {
-            for (p_idx, &pc) in pattern.iter().enumerate().rev() {
-                let char_match = matches(pc, sc);
+        // for each character we want to see how far we can get back
 
-                let asterisk = match pattern.get(p_idx + 1) {
-                    None => false,
-                    Some(&c) => c == '*',
+        let pointers = vec![str_len];
+
+
+        for s_idx in (0..=str_len).rev() {
+            for p_idx in (0..pattern_len).rev() {
+                let pc = &pattern[p_idx];
+
+                let matches = if s_idx == str_len {
+                    false
+                } else {
+                    pc.matcher.is_valid(string[s_idx])
                 };
 
-                dp[(s_idx, p_idx)] = if asterisk {
-                    let valid_no_match = dp[(s_idx, p_idx + 2)];
-                    let valid_match = char_match && dp[(s_idx + 1, p_idx)];
+                let res = match pc.kind {
+                    PatternKind::One => {
+                        matches && dp[(s_idx +1, p_idx + 1)]
+                    },
+                    PatternKind::Wildcard => {
+                        (matches && dp[(s_idx + 1, p_idx )]) || dp[(s_idx, p_idx + 1 )]
+                    }
+                };
 
-                    valid_no_match || valid_match
-                } else {
-                    char_match && dp[(s_idx + 1, p_idx + 1)]
-                }
+                dp[(s_idx, p_idx)] = res;
             }
         }
 
@@ -94,10 +180,11 @@ mod tests {
 
     #[test]
     fn it_works() {
+        assert!(!is_match("a", ""));
         assert!(!is_match("aa", "a"));
-        // assert!(is_match("aa", "a*"));
-        // assert!(is_match("ab", ".*"));
-        // assert!(is_match("aab", "c*a*b"));
-        // assert!(!is_match("mississippi", "mis*is*p*."));
+        assert!(is_match("aa", "a*"));
+        assert!(is_match("ab", ".*"));
+        assert!(is_match("aab", "c*a*b"));
+        assert!(!is_match("mississippi", "mis*is*p*."));
     }
 }
