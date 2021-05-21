@@ -140,9 +140,6 @@ impl Solution {
 
         // for each character we want to see how far we can get back
 
-        let pointers = vec![str_len];
-
-
         for s_idx in (0..=str_len).rev() {
             for p_idx in (0..pattern_len).rev() {
                 let pc = &pattern[p_idx];
