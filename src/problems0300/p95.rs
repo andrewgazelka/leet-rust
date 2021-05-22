@@ -7,6 +7,8 @@ fn idx(character: char) -> usize {
 }
 
 impl Solution {
+
+    /// based off of solution on leetcode
     pub fn longest_substring(s: String, k: i32) -> i32 {
         let s: Vec<_> = s.chars().collect();
         let len = s.len();
