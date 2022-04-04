@@ -17,7 +17,7 @@ const fn create_mask_helper(mut input: u32, set: bool, width: u8, iter: u32, sub
 }
 
 /// masks start with 0
-pub const fn create_mask(period: u8) -> u32 {
+pub const fn mask(period: u8) -> u32 {
     let iter_0idx = NUM_BITS - 1;
     let width_0idx = period - 1;
     create_mask_helper(0, false, width_0idx, iter_0idx, width_0idx)

@@ -1,11 +1,11 @@
 use crate::Solution;
-use crate::utils::create_mask;
+use crate::utils::mask;
 use std::ops::Not;
 
-const MASK_8: u32 = create_mask(8);
-const MASK_4: u32 = create_mask(4);
-const MASK_2: u32 = create_mask(2);
-const MASK_1: u32 = create_mask(1);
+const MASK_8: u32 = mask(8);
+const MASK_4: u32 = mask(4);
+const MASK_2: u32 = mask(2);
+const MASK_1: u32 = mask(1);
 
 impl Solution {
     pub fn reverse_bits(mut n: u32) -> u32 {
